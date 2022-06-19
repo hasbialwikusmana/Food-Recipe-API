@@ -1,7 +1,7 @@
 const express = require("express");
 require("dotenv").config();
-
 const helmet = require("helmet");
+const xss = require("xss-clean");
 const cors = require("cors");
 const path = require("path");
 const createError = require("http-errors");
@@ -18,11 +18,12 @@ app.use(
   })
 );
 app.use(cors());
+app.use(xss());
 app.use(bodyParser.json());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(morgan("dev"));
-app.use("img", express.static(path.join(__dirname, "./uploads")));
+app.use("img", express.static(path.join(__dirname, "./src/uploads")));
 app.use("/v1", routeNavigation);
 
 app.use((req, res, next) => {
